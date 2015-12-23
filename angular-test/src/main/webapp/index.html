@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html ng-app="angular-test">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap-3.3.6-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="assets/styles/main.css"/>
+    <script type="text/javascript" src="scripts/angular.min.js"></script>
+	<script type="text/javascript" src="scripts/app/app.js"></script>
+</head>
+<body class="list-group" ng-controller="StoreController as store">
+
+	<h1 class="text-center">DJ's Pet Store</h1>
+	<div class="list-group-item" ng-repeat="product in store.products" ng-hide="store.product.soldOut">
+		<h3>
+			{{product.name}}
+	    	<em class="pull-right">{{product.price | currency}}</em><br>
+	    	<button class="pull-right" ng-show="product.canPurchase")>Add to Cart</button>
+	    	<img ng-src="{{product.image}}" width=20% height=20%/>
+	    </h3>
+
+	    <section class="tab" ng-controller="PanelController as panel">
+			<ul class="nav nav-pills">
+				<li ng-class="{active: panel.isSelected(1)}"><a href ng-click="panel.selectTab(1)">Description</a></li>
+				<li ng-class="{active: panel.isSelected(2)}"><a href ng-click="panel.selectTab(2)">Specifications</a></li>
+				<li ng-class="{active: panel.isSelected(3)}"><a href ng-click="panel.selectTab(3)">Reviews</a></li>
+			</ul>
+			<div class="panel" ng-show="panel.isSelected(1)">
+				<h4>Description</h4>
+				<blockquote>
+					Type: {{product.type}}<br>
+					Breed: {{product.description}}
+				</blockquote>
+			</div>
+			<div class="panel" ng-show="panel.isSelected(3)">
+				<h4>Reviews</h4>
+				<blockquote ng-repeat="review in product.reviews">
+					<strong>Stars: {{review.stars}}</strong><br>
+					{{review.body}}<br>
+					<cite>by: {{review.author}} on {{review.createdOn | date}}</cite>
+				</blockquote>
+
+				<!--  Review Form -->
+				<form name="reviewForm" ng-controller="ReviewController as reviewCtrl" ng-submit="reviewForm.$valid && reviewCtrl.addReview(product)" novalidate>
+					<!--  Live Preview
+					<blockquote>
+						<strong>Stars: {{reviewCtrl.review.stars}}</strong><br>
+						{{reviewCtrl.review.body}}</br>
+						<cite class="clearfix">-{{reviewCtrl.review.author}}</cite>
+					</blockquote>
+					-->
+
+					<!--  Review Form -->
+					<h3>Submit a Review</h3>
+					<fieldset class="form-group" style="width: 25%">
+						<select class="form-control" ng-model="reviewCtrl.review.stars"
+							ng-options="stars for stars in [5,4,3,2,1]" title="Stars" required>
+							<option value="">Rate the Product</option>
+						</select>
+
+						<textarea class="form-control" ng-model="reviewCtrl.review.body"
+							placeholder="Write a short review of the product..."
+							title="Review" required></textarea>
+
+						<input type="email" class="form-control"
+							ng-model="reviewCtrl.review.author"
+							placeholder="customer@example.org" title="Email" required /> <input
+							type="submit" class="btn btn-primary pull-right"
+							value="Submit Review"/>
+					</fieldset>
+				</form>
+			</div>
+
+            <div style="position: absolute; top: 70px; left: 255px; width: 240px; height: 100px; border-style=solid; border-width=15px; border-color: black">
+            </div>
+
+		</section>
+	</div>
+</body>
+</html>
